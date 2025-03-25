@@ -1,56 +1,101 @@
+
 #include "../include/tinyArgs.hpp"
 
 
 namespace targs
 {
-    tinyArgs::tinyArgs(int argc , char ** argv) : argCounter(argc) , args(argv)
-    {
-        convertToString();
-        convertToMap();
-        splitFlags();
-    };
 
 
-    void tinyArgs::convertToString()
-    {
-        for(int i = 0 ; i < argCounter ; i++)
+        TinyArgs::TinyArgs(int argc , char ** argv)
         {
-            fArgs.push_back(args[i]);
-        }
-    }
-
-
-    void tinyArgs::convertToMap()
-    {
-        for(int i = 1 ; i < argCounter - 1 ; i++)
-        {
-            fav[fArgs[i]] = fArgs[i + 1];
-        }
-    }
-
-
-
-    void tinyArgs::splitFlags()
-    {
-        for (std::string & arg : fArgs)
-        {
-            if (!arg.empty() && arg[0] == '-')
+            if (argc > 1)
             {
-                flags.push_back(arg);
+            argCounter = argc;
+            argFormatter(argv);
+            flagSpliter();
+            setFAV();
+            }
+            else 
+            {
+                argCounter = -1;
             }
         }
-    }
-    
+        
+
+        void TinyArgs::argFormatter(char ** argv)
+        {
+            for (int i = 1 ; i < argCounter ; i++)
+            {
+                args.push_back(argv[i]);
+            }
+        }
+
+        void TinyArgs::flagSpliter()
+        {
+            for(int i = 0 ; i < args.size() ; i++)
+            {
+                std::string ar = args[i];
+                if (i % 2 == 0)
+                {
+                    if (ar.size() > 2 && ar[0] == '-' && ar[1] == '-')
+                    {
+                        longFlags.push_back(ar);
+                    }
+                    else if (ar.size() > 1 && ar[0] == '-')
+                    {
+                        shortFlags.push_back(ar);
+                    }
+                }
+                
+            }
+        }
 
 
-    std::vector<std::string> tinyArgs::readFlags()
-    {
-        return flags;
-    }
+        void TinyArgs::setFAV()
+        {
+            if (args.size() % 2 == 1)
+            {
+                return;
+            }
+
+            for(int i = 0 ; i < args.size() - 1 ; i = i + 2)
+            {
+                fav[args[i]] = args[i + 1];
+            }
+        }
 
 
-    std::map<std::string , std::string> tinyArgs::readArgs()
-    {
-        return fav;
-    }
+
+
+
+
+        std::string TinyArgs::getShortFlag(std::string flag)
+        {
+            if (argCounter == -1){return "";}
+            for (int i = 0 ; i < shortFlags.size() ; i++)
+            {
+                if (shortFlags[i] == flag)
+                {
+                    return fav[flag];
+                }
+            }
+            return "";
+        }
+
+
+
+
+        std::string TinyArgs::getLongFlag(std::string flag)
+        {
+            if (argCounter == -1){return "";}
+            for (int i = 0 ; i < longFlags.size() ; i++)
+            {
+                if (longFlags[i] == flag)
+                {
+                    return fav[flag];
+                }
+            }
+            return "";
+        }
+
 }
