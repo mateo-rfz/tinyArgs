@@ -1,5 +1,5 @@
-#ifndef TINY_ARGS
-#define TINY_ARGS
+#ifndef TINY_ARGS_HPP
+#define TINY_ARGS_HPP
 
 
 #include <iostream>
@@ -15,9 +15,13 @@ namespace targs
         int argCounter;
         std::vector<std::string> args;
 
-        std::vector<std::string> shortFlags;
-        std::vector<std::string> longFlags;
+        std::vector<std::string> iShortFlags; // input short flags
+        std::vector<std::string> iLongFlags;
         std::map<std::string , std::string> fav; // flag and value
+
+        std::vector<std::string> setedShortFlags;
+        std::vector<std::string> setedLongFlags;
+
 
 
 
@@ -31,9 +35,11 @@ namespace targs
         public : 
         TinyArgs(int argc , char ** argv);
 
-        std::string getShortFlag(std::string flag);
+        std::string getShortFlag(std::string flag , std::string help);
 
-        std::string getLongFlag(std::string flag);
+        std::string getLongFlag(std::string flag , std::string help);
+
+        std::string msgIfNotUseFlag();
     };
 }
 
