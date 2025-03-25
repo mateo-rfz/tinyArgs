@@ -1,36 +1,41 @@
-#ifndef TINY_ARGP
-#define TINY_ARGP
+#ifndef TINY_ARGS
+#define TINY_ARGS
 
-#include <string>
+
+#include <iostream>
 #include <vector>
 #include <map>
 
 
 namespace targs
 {
-    class tinyArgs
+    class TinyArgs
     {
-        protected : 
-            int argCounter ;
-            char ** args ;
+        private : 
+        int argCounter;
+        std::vector<std::string> args;
 
-            std::vector<std::string> fArgs;
-            std::vector<std::string> flags;
-            std::map<std::string , std::string> fav; // flag and values 
+        std::vector<std::string> shortFlags;
+        std::vector<std::string> longFlags;
+        std::map<std::string , std::string> fav; // flag and value
 
 
-            void convertToString();
-            void convertToMap();
-            void splitFlags();
+
+
+        void argFormatter(char ** argv);
+
+        void flagSpliter();
+
+        void setFAV();
 
         public : 
-            tinyArgs(int argc , char ** argv);
-            
-            std::vector<std::string> readFlags();
-            std::map<std::string , std::string> readArgs();
+        TinyArgs(int argc , char ** argv);
+
+        std::string getShortFlag(std::string flag);
+
+        std::string getLongFlag(std::string flag);
     };
 }
 
 
-
-#endif 
+#endif
