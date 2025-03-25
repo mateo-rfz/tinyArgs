@@ -13,7 +13,7 @@ namespace targs
             flagSpliter();
             setFAV();
             }
-            else 
+            else
             {
                 argCounter = -1;
             }
@@ -69,6 +69,19 @@ namespace targs
 
 
 
+        std::vector<std::string> TinyArgs::getAllData()
+        {
+            std::vector<std::string> tmp = {""};
+            if (argCounter == -1){return tmp;}
+
+            return args;
+        }
+
+
+
+
+
+
         std::string TinyArgs::getShortFlag(std::string flag , std::string help)
         {
             setedShortFlags.push_back(flag);
@@ -83,7 +96,7 @@ namespace targs
                     return fav[flag];
                 }
             }
-            
+
             return "";
         }
 
@@ -135,6 +148,29 @@ namespace targs
         
             return msg;
         }
-        
 
+
+
+
+        std::string TinyArgs::help()
+        {
+            std::string msg;
+        
+            if (!setedShortFlags.empty()) {
+                for (int i = 0; i < setedShortFlags.size() - 1; i = i + 2)
+                {
+                    msg += setedShortFlags[i] + " -> " + setedShortFlags[i + 1] + "\n";
+                }
+            }
+        
+            if (!setedLongFlags.empty()) {
+                for (int i = 0; i < setedLongFlags.size() - 1; i = i + 2)
+                {
+                    msg += setedLongFlags[i] + " -> " + setedLongFlags[i + 1] + "\n";
+                }
+            }
+        
+            return msg;
+        }
+        
 }

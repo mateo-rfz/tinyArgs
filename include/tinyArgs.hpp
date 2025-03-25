@@ -35,11 +35,15 @@ namespace targs
         public : 
         TinyArgs(int argc , char ** argv);
 
+        std::vector<std::string> getAllData();
+
         std::string getShortFlag(std::string flag , std::string help);
 
         std::string getLongFlag(std::string flag , std::string help);
 
         std::string msgIfNotUseFlag();
+
+        std::string TinyArgs::help();
     };
 }
 
