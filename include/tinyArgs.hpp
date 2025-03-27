@@ -13,37 +13,34 @@ namespace targs
     {
         private : 
         int argCounter;
-        std::vector<std::string> args;
+        int flagCounter;
 
-        std::vector<std::string> iShortFlags; // input short flags
-        std::vector<std::string> iLongFlags;
-        std::map<std::string , std::string> fav; // flag and value
-
-        std::vector<std::string> setedShortFlags;
-        std::vector<std::string> setedLongFlags;
-
+        std::vector<std::string> flags;
+        std::map<std::string , std::string> fav;
+        std::string runArg = "";
+        
+        std::string helpmsg;
 
 
-
-
-        void argFormatter(char ** argv);
-
-        void flagSpliter();
-
-        void setFAV();
 
         public : 
         TinyArgs(int argc , char ** argv);
 
-        std::vector<std::string> getAllData();
+        std::string getShortFlagValue(std::string flag , std::string help);
+        std::string getLongFlagValue(std::string flag , std::string help);
 
-        std::string getShortFlag(std::string flag , std::string help);
+        bool getShortFlag(std::string flag , std::string help);
+        bool getLongFlag(std::string flag , std::string help);
 
-        std::string getLongFlag(std::string flag , std::string help);
+        std::vector<std::string> getAllFlags();
 
-        std::string msgIfNotUseFlag();
+        std::map<std::string , std::string>  getAllFlagsAndValue();
 
-        std::string TinyArgs::help();
+        std::string help();
+
+        std::string msgIfNotUseFlags();
+
+        std::string getRunArgs();
     };
 }
 

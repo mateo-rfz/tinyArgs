@@ -1,176 +1,157 @@
-
 #include "../include/tinyArgs.hpp"
 
 
 namespace targs
 {
-        TinyArgs::TinyArgs(int argc , char ** argv)
+    TinyArgs::TinyArgs(int argc , char ** argv)
+    {
+        argCounter = argc;
+        flagCounter = 0;
+
+
+        //---------------------for standard args
+
+        for(int i = 1 ; i < argCounter ; i++)
         {
-            if (argc > 1)
+            char * arg = argv[i];
+
+            if (arg[0] == '-')
             {
-            argCounter = argc;
-            argFormatter(argv);
-            flagSpliter();
-            setFAV();
+                flags.push_back(arg);
+                flagCounter ++;
+            }
+            else if(runArg.empty())
+            {
+                runArg = arg;
+            }
+                
+            //(argv[i + 1])[0] -> the next arg
+            if(i + 1 < argCounter && (argv[i + 1])[0] != '-')
+            {
+                fav[arg] = argv[i + 1];
+                i = i + 1;
             }
             else
             {
-                argCounter = -1;
+                fav[arg] = "&&TRUE&&";
             }
         }
         
+    }
 
-        void TinyArgs::argFormatter(char ** argv)
+
+
+
+
+
+    std::string TinyArgs::getShortFlagValue(std::string flag , std::string help)
+    {   
+        helpmsg += flag + "->" + help + "\n";
+
+        for (int i = 0 ; i < flagCounter ; i++)
         {
-            for (int i = 1 ; i < argCounter ; i++)
+            if (flag == flags[i])
             {
-                args.push_back(argv[i]);
+                return fav[flag];
             }
         }
+        return "";
+    }
 
-        void TinyArgs::flagSpliter()
+
+
+
+    std::string TinyArgs::getLongFlagValue(std::string flag , std::string help)
+    {   
+        helpmsg += flag + "->" + help + "\n";
+
+        for (int i = 0 ; i < flagCounter ; i++)
         {
-            for(int i = 0 ; i < args.size() ; i++)
+            if (flag == flags[i])
             {
-                std::string ar = args[i];
-                if (i % 2 == 0)
-                {
-                    if (ar.size() > 2 && ar[0] == '-' && ar[1] == '-')
-                    {
-                        iLongFlags.push_back(ar);
-                    }
-                    else if (ar.size() > 1 && ar[0] == '-')
-                    {
-                        iShortFlags.push_back(ar);
-                    }
-                }
-                
+                return fav[flag];
             }
         }
+        return "";
+    }
 
 
 
 
-        void TinyArgs::setFAV()
+
+
+    bool TinyArgs::getShortFlag(std::string flag , std::string help)
+    {
+        helpmsg += flag + "->" + help + "\n";
+
+        for (int i = 0 ; i < flagCounter ; i++)
         {
-            if (args.size() % 2 == 1)
+            if (flag == flags[i])
             {
-                return;
+                return true;
             }
+        }
+        return false;
+    }
 
-            for(int i = 0 ; i < args.size() - 1 ; i = i + 2)
+
+
+
+
+
+
+    bool TinyArgs::getLongFlag(std::string flag , std::string help)
+    {
+        helpmsg += flag + "->" + help + "\n";
+
+        for (int i = 0 ; i < flagCounter ; i++)
+        {
+            if (flag == flags[i])
             {
-                fav[args[i]] = args[i + 1];
+                return true;
             }
         }
+        return false;
+    }
 
 
 
 
 
-
-        std::vector<std::string> TinyArgs::getAllData()
-        {
-            std::vector<std::string> tmp = {""};
-            if (argCounter == -1){return tmp;}
-
-            return args;
-        }
+    std::vector<std::string> TinyArgs::getAllFlags()
+    {
+        return flags;
+    }
 
 
 
 
 
-
-        std::string TinyArgs::getShortFlag(std::string flag , std::string help)
-        {
-            setedShortFlags.push_back(flag);
-            setedShortFlags.push_back(help);
-
-            if (argCounter == -1){return "";}
-
-            for (int i = 0 ; i < iShortFlags.size() ; i++)
-            {
-                if (iShortFlags[i] == flag)
-                {
-                    return fav[flag];
-                }
-            }
-
-            return "";
-        }
+    std::map<std::string , std::string> TinyArgs::getAllFlagsAndValue()
+    {
+        return fav;
+    }
 
 
 
 
-        std::string TinyArgs::getLongFlag(std::string flag , std::string help)
-        {
-            setedLongFlags.push_back(flag);
-            setedLongFlags.push_back(help);
-
-            if (argCounter == -1){return "";}
-
-            for (int i = 0 ; i < iLongFlags.size() ; i++)
-            {
-                if (iLongFlags[i] == flag)
-                {
-                    return fav[flag];
-                }
-            }
-
-            return "";
-        }
+    std::string TinyArgs::getRunArgs()
+    {
+        return runArg;
+    }
 
 
 
 
-
-
-        std::string TinyArgs::msgIfNotUseFlag()
-        {
-            if (argCounter != -1){return "";}
-        
-            std::string msg;
-        
-            if (!setedShortFlags.empty()) {
-                for (int i = 0; i < setedShortFlags.size() - 1; i = i + 2)
-                {
-                    msg += setedShortFlags[i] + " -> " + setedShortFlags[i + 1] + "\n";
-                }
-            }
-        
-            if (!setedLongFlags.empty()) {
-                for (int i = 0; i < setedLongFlags.size() - 1; i = i + 2)
-                {
-                    msg += setedLongFlags[i] + " -> " + setedLongFlags[i + 1] + "\n";
-                }
-            }
-        
-            return msg;
-        }
+    std::string TinyArgs::help()
+    {
+        return helpmsg;
+    }
 
 
 
-
-        std::string TinyArgs::help()
-        {
-            std::string msg;
-        
-            if (!setedShortFlags.empty()) {
-                for (int i = 0; i < setedShortFlags.size() - 1; i = i + 2)
-                {
-                    msg += setedShortFlags[i] + " -> " + setedShortFlags[i + 1] + "\n";
-                }
-            }
-        
-            if (!setedLongFlags.empty()) {
-                for (int i = 0; i < setedLongFlags.size() - 1; i = i + 2)
-                {
-                    msg += setedLongFlags[i] + " -> " + setedLongFlags[i + 1] + "\n";
-                }
-            }
-        
-            return msg;
-        }
-        
+    std::string TinyArgs::msgIfNotUseFlags()
+    {
+        return helpmsg;
+    }
 }
