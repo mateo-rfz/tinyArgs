@@ -199,6 +199,11 @@ namespace targs
 
     std::string TinyArgs::msgIfNotUseFlags()
     { 
+        /*
+        If the program using this library has defined flags (added help messages)
+        but the user did not provide any flags, return the help message.
+        */
+       
         if (flagCounter < 1 && ! helpmsg.empty())
         {
             return helpmsg;
