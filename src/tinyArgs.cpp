@@ -15,11 +15,20 @@ namespace targs
         {
             char * arg = argv[i];
 
+            //if parameter start with '-' tinyArgs recognize this is flag
             if (arg[0] == '-')
             {
                 flags.push_back(arg);
                 flagCounter ++;
             }
+
+            /* 
+            هf the argument is not a flag (does not start with '-'), 
+            and runArg is empty, store this argument as runArg
+            فhis ensures that only the first non-flag argument is saved, 
+            even if the user provides another one at the end.
+            */
+
             else if(runArg.empty())
             {
                 runArg = arg;
@@ -46,10 +55,21 @@ namespace targs
 
     std::string TinyArgs::getShortFlagValue(std::string flag , std::string help)
     {   
+        /*
+        Search for the flag in the `flags` vector:
+        - if the flag exists, return its corresponding value from `fav`
+        - if the flag does not exist  return an empty string.
+    ‍   */
+
+        //add this help line to helpmsg variable for show on help method
         helpmsg += flag + "->" + help + "\n";
 
         for (int i = 0 ; i < flagCounter ; i++)
         {
+            /*
+            if the function returns "&&TRUE&&" or "&&FALSE&&",
+            it means the flag exists in the input flags but does not have a parameter
+            */
             if (flag == flags[i])
             {
                 return fav[flag];
@@ -63,10 +83,21 @@ namespace targs
 
     std::string TinyArgs::getLongFlagValue(std::string flag , std::string help)
     {   
+        /*
+        Search for the flag in the `flags` vector:
+        - if the flag exists, return its corresponding value from `fav`
+        - if the flag does not exist  return an empty string.
+    ‍   */
+
+        //add this help line to helpmsg variable for show on help method
         helpmsg += flag + "->" + help + "\n";
 
         for (int i = 0 ; i < flagCounter ; i++)
         {
+            /*
+            if the function returns "&&TRUE&&" or "&&FALSE&&",
+            it means the flag exists in the input flags but does not have a parameter
+            */
             if (flag == flags[i])
             {
                 return fav[flag];
@@ -82,6 +113,14 @@ namespace targs
 
     bool TinyArgs::getShortFlag(std::string flag , std::string help)
     {
+        /*
+        Search for the flag in the `flags` vector:
+        - if the flag exists, return true
+        - if the flag does not exist  return false
+    ‍   */
+
+
+        //add this help line to helpmsg variable for show on help method
         helpmsg += flag + "->" + help + "\n";
 
         for (int i = 0 ; i < flagCounter ; i++)
@@ -102,6 +141,14 @@ namespace targs
 
     bool TinyArgs::getLongFlag(std::string flag , std::string help)
     {
+        /*
+        Search for the flag in the `flags` vector:
+        - if the flag exists, return true
+        - if the flag does not exist  return false
+    ‍   */
+
+
+        //add this help line to helpmsg variable for show on help method
         helpmsg += flag + "->" + help + "\n";
 
         for (int i = 0 ; i < flagCounter ; i++)
@@ -151,7 +198,7 @@ namespace targs
 
 
     std::string TinyArgs::msgIfNotUseFlags()
-    {
+    { 
         return helpmsg;
     }
 }
