@@ -199,6 +199,10 @@ namespace targs
 
     std::string TinyArgs::msgIfNotUseFlags()
     { 
-        return helpmsg;
+        if (flagCounter < 1 && ! helpmsg.empty())
+        {
+            return helpmsg;
+        }
+        return "";
     }
 }
