@@ -16,6 +16,8 @@ namespace targs
         int flagCounter;
 
         std::vector<std::string> flags;
+
+        //all the flags parameters save string on fav
         std::map<std::string , std::string> fav;
         std::string runArg = "";
         
