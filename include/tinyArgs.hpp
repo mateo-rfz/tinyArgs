@@ -30,9 +30,11 @@ namespace targs
 
         std::string getShortFlagValue(std::string flag , std::string help);
         std::string getLongFlagValue(std::string flag , std::string help);
+        std::string getPairFlagValue(std::string lFlag , std::string sFlag , std::string help);
 
         bool getShortFlag(std::string flag , std::string help);
         bool getLongFlag(std::string flag , std::string help);
+        bool getPairFlag(std::string lFlag , std::string sFlag , std::string help);
 
         std::vector<std::string> getAllFlags();
 

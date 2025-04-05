@@ -111,13 +111,48 @@ namespace targs
 
 
 
+    std::string TinyArgs::getPairFlagValue(std::string lFlag , std::string sFlag , std::string help)
+        {
+        /*
+        Search for the flags in the `flags` vector:
+        - if the flag exists, return its corresponding value from `fav`
+        - if the flag does not exist  return an empty string.
+    ‍   */
+
+
+            //add this help line to helpmsg variable for show on help method
+            helpmsg += lFlag + " , "  + sFlag + " ->" + help + "\n";
+
+            for (int i = 0 ; i < flagCounter ; i++)
+            {
+                /*
+                if the function returns "&&TRUE&&" or "&&FALSE&&",
+                it means the flag exists in the input flags but does not have a parameter
+                */
+                if (lFlag == flags[i])
+                {
+                    return fav[lFlag];
+                }
+                else if (sFlag == flags[i])
+                {
+                    return fav[sFlag];
+                }
+            }
+            return "";
+        }
+
+
+
+
+
+
     bool TinyArgs::getShortFlag(std::string flag , std::string help)
     {
         /*
         Search for the flag in the `flags` vector:
         - if the flag exists, return true
         - if the flag does not exist  return false
-    ‍   */
+    ‍    */
 
 
         //add this help line to helpmsg variable for show on help method
@@ -154,6 +189,31 @@ namespace targs
         for (int i = 0 ; i < flagCounter ; i++)
         {
             if (flag == flags[i])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+    bool TinyArgs::getPairFlag(std::string lFlag , std::string sFlag , std::string help)
+    {
+        /*
+        Search for the flag in the `flags` vector:
+        - if the flag exists, return true
+        - if the flag does not exist  return false
+    ‍   */
+
+
+        //add this help line to helpmsg variable for show on help method
+        helpmsg += lFlag + " , "  + sFlag + " ->" + help + "\n";
+
+        for (int i = 0 ; i < flagCounter ; i++)
+        {
+            if (lFlag == flags[i] || sFlag == flags[i])
             {
                 return true;
             }
